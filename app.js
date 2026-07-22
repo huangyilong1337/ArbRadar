@@ -1,14 +1,29 @@
 function updateTime() {
     const now = new Date();
 
-    const h = String(now.getHours()).padStart(2, "0");
-    const m = String(now.getMinutes()).padStart(2, "0");
-    const s = String(now.getSeconds()).padStart(2, "0");
-
     document.getElementById("time").innerText =
-        `${h}:${m}:${s}`;
+        now.toLocaleString("zh-CN");
 }
 
+setInterval(updateTime, 1000);
 updateTime();
 
-setInterval(updateTime,1000);
+const table = document.getElementById("fundTable");
+
+funds.forEach(fund => {
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+        <td>${fund.code}</td>
+        <td>${fund.name}</td>
+        <td>${fund.premium}%</td>
+        <td>${fund.turnover}</td>
+        <td>${fund.limit}</td>
+        <td>${fund.settlement}</td>
+        <td>${fund.score}</td>
+    `;
+
+    table.appendChild(row);
+
+});
