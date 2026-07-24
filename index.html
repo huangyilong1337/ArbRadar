@@ -1,50 +1,70 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArbRadar</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArbRadar | LOF套利雷达</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="header">
-    <h1>📈 ArbRadar</h1>
+  <div class="header">
+    <h1>📈 ArbRadar v0.1</h1>
+    <div class="time">更新于: <span id="time">10:00:00</span></div>
+  </div>
 
-    <p>个人 LOF 套利雷达</p>
-
-    <div class="time">
-        更新时间：
-        <span id="time">--</span>
+  <div class="card-list">
+    <!-- 样例基金卡片 1 -->
+    <div class="card">
+      <div class="card-header">
+        <span>易方达原油LOF <span class="fund-code">(161129)</span></span>
+        <span class="tag limit">限购 100元</span>
+      </div>
+      <div class="metrics">
+        <div class="metric-box">
+          <span class="label">实时溢价率</span>
+          <span class="premium-rate positive">+5.24%</span>
+        </div>
+        <div class="metric-box" style="text-align: right;">
+          <span class="label">成交额</span>
+          <span style="font-size: 0.95rem; font-weight: bold;">1,240 万</span>
+        </div>
+      </div>
+      <div class="tags">
+        <span class="tag settle">交收: T+3</span>
+        <span class="tag">申购状态: 暂停大额</span>
+      </div>
+      <div class="notice">
+        📢 最新公告: 关于暂停大额申购的业务公告 (2026-07-24)
+      </div>
     </div>
-</div>
 
-<div class="card">
-    <h2>今日套利机会</h2>
-
-    <table border="1" cellspacing="0" cellpadding="8" width="100%">
-        <thead>
-            <tr>
-                <th>代码</th>
-                <th>名称</th>
-                <th>溢价率</th>
-                <th>成交额</th>
-                <th>限购</th>
-                <th>交收</th>
-                <th>评分</th>
-            </tr>
-        </thead>
-
-        <tbody id="fundTable">
-        </tbody>
-
-    </table>
-</div>
-
-<script src="data.js"></script>
-<script src="app.js"></script>
+    <!-- 样例基金卡片 2 -->
+    <div class="card">
+      <div class="card-header">
+        <span>纳斯达克LOF <span class="fund-code">(161130)</span></span>
+        <span class="tag limit">限购 1000元</span>
+      </div>
+      <div class="metrics">
+        <div class="metric-box">
+          <span class="label">实时溢价率</span>
+          <span class="premium-rate positive">+2.18%</span>
+        </div>
+        <div class="metric-box" style="text-align: right;">
+          <span class="label">成交额</span>
+          <span style="font-size: 0.95rem; font-weight: bold;">850 万</span>
+        </div>
+      </div>
+      <div class="tags">
+        <span class="tag settle">交收: T+2</span>
+        <span class="tag">申购状态: 正常</span>
+      </div>
+      <div class="notice">
+        📢 最新公告: 溢价交易风险提示公告
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
+
