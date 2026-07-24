@@ -1,89 +1,50 @@
-<!<!DOCTYPE html>
-<超文本标记语言 语言="zh-CN">
-<头>
-    <元 字符集="UTF-8">
-    <元 名字="viewport" 内容=宽度=设备宽度，初始缩放比例=1.0>
-    <标题>ArbRadar</标题>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArbRadar</title>
 
-    <链接 关系="stylesheet" 链接="style.css">
-</头>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-<身体>
+<body>
 
-<级 班级="header">
-
+<div class="header">
     <h1>📈 ArbRadar</h1>
 
-    <P>个人 LOF</P>
+    <p>个人 LOF 套利雷达</p>
 
-    <级 班级="time">
-更新时间：
-        <跨度 身份证="time">09:30:00</跨度>
-    </级>
+    <div class="time">
+        更新时间：
+        <span id="time">--</span>
+    </div>
+</div>
 
-</级>
+<div class="card">
+    <h2>今日套利机会</h2>
 
-<级 班级="card">
+    <table border="1" cellspacing="0" cellpadding="8" width="100%">
+        <thead>
+            <tr>
+                <th>代码</th>
+                <th>名称</th>
+                <th>溢价率</th>
+                <th>成交额</th>
+                <th>限购</th>
+                <th>交收</th>
+                <th>评分</th>
+            </tr>
+        </thead>
 
-    <级 班级="title">
+        <tbody id="fundTable">
+        </tbody>
 
-        <级>
+    </table>
+</div>
 
-            <h2>161129</h2>
-
-            <P>原油 LOF</P>
-
-        </级>
-
-        <级 班级="premium">
-
-            2.35%
-
-        </级>
-
-    </级>
-
-    <级 班级="info">
-
-        <级>
-
-            <跨度>成交额</跨度>
-
-            <强大的>6800万</强大的>
-
-        </级>
-
-        <级>
-
-            <跨度>限购</跨度>
-
-            <强大的>100元</强大的>
-
-        </级>
-
-        <级>
-
-            <跨度>交收</跨度>
-
-            <强大的>T+3</强大的>
-
-        </级>
-
-        <级>
-
-            <跨度>类型</跨度>
-
-            <强大的>合格境内机构投资者</强大的>
-
-        </级>
-
-    </级>
-
-</级>
-
-<剧本 源="app.js"></剧本>
-
-</身体>
-</超文本标记语言>
 <script src="data.js"></script>
 <script src="app.js"></script>
+
+</body>
+</html>
