@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArbRadar | 全市场 LOF 套利雷达</title>
+  <title>ArbRadar | 纯 LOF 套利雷达</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: #0d1117; color: #c9d1d9; padding: 12px; }
@@ -60,14 +60,13 @@
       background: #21262d;
       color: #c9d1d9;
     }
-    .tag-limit { background: rgba(56, 139, 253, 0.15); color: #58a6ff; }
     .loading-text { text-align: center; padding: 20px; color: #8b949e; }
   </style>
 </head>
 <body>
 
   <div class="header">
-    <h1>📈 ArbRadar v0.1 (全市场)</h1>
+    <h1>📈 ArbRadar v0.1 (纯 LOF 监控)</h1>
     <div class="time-badge">更新: <span id="time">加载中...</span> (北京时间)</div>
   </div>
 
@@ -77,49 +76,58 @@
         <tr>
           <th>代码 / 名称</th>
           <th>现价</th>
-          <th>实时估算溢价率</th>
+          <th>今日涨跌</th>
           <th>成交额</th>
-          <th>状态</th>
+          <th>类型</th>
         </tr>
       </thead>
       <tbody id="lof-list">
         <tr>
-          <td colspan="5" class="loading-text">⏳ 正在从全市场抓取实时 LOF 基金数据，请稍候...</td>
+          <td colspan="5" class="loading-text">⏳ 正在筛选全市场纯 LOF 基金，请稍候...</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 自动获取天天基金全市场 LOF 行情数据 -->
   <script>
     function updateTime() {
       const now = new Date();
-      // 转换为北京时间 (UTC+8)
       const options = { timeZone: 'Asia/Shanghai', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
       document.getElementById('time').innerText = new Intl.DateTimeFormat('zh-CN', options).format(now);
     }
 
     async function fetchLOFData() {
       try {
-        // 请求全市场行情数据
-        const response = await fetch('https://push2.eastmoney.com/api/qt/clist/get?pn=1&pz=300&po=1&np=1&fltt=2&invt=2&fid=f3&fs=b:MK0400,b:MK0401');
+        // 获取全量场内基金列表
+        const response = await fetch('https://push2.eastmoney.com/api/qt/clist/get?pn=1&pz=500&po=1&np=1&fltt=2&invt=2&fid=f3&fs=b:MK0400,b:MK0401');
         const res = await response.json();
-        const data = res.data ? res.data.diff : [];
+        const rawData = res.data ? res.data.diff : [];
 
         const tbody = document.getElementById('lof-list');
         tbody.innerHTML = '';
 
-        if (!data || data.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" class="loading-text">⚠️ 暂未获取到数据，请重试</td></tr>';
+        // 核心过滤逻辑：排除 ETF，只保留真正的 LOF 基金 (16/501/502 开头，且名字不含 ETF)
+        const lofData = rawData.filter(item => {
+          const code = item.f12;
+          const name = item.f14 || '';
+          
+          const isLofCode = code.startsWith('16') || code.startsWith('501') || code.startsWith('502') || code.startsWith('169');
+          const isNotETF = !name.includes('ETF');
+          
+          return isLofCode && isNotETF;
+        });
+
+        if (lofData.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="loading-text">⚠️ 未找到 LOF 数据，请重试</td></tr>';
           return;
         }
 
-        data.forEach(item => {
-          const code = item.f12; // 基金代码
-          const name = item.f14; // 基金名称
-          const price = item.f2 !== "-" ? item.f2.toFixed(3) : "-"; // 最新价
-          const ratio = item.f3 !== "-" ? item.f3 : 0; // 涨跌幅 / 溢价估算参考
-          const volume = item.f6 !== "-" ? (item.f6 / 10000).toFixed(2) + " 万" : "-"; // 成交额
+        lofData.forEach(item => {
+          const code = item.f12;
+          const name = item.f14;
+          const price = item.f2 !== "-" ? item.f2.toFixed(3) : "-";
+          const ratio = item.f3 !== "-" ? item.f3 : 0;
+          const volume = item.f6 !== "-" ? (item.f6 / 10000).toFixed(2) + " 万" : "-";
 
           const rateClass = ratio >= 0 ? 'rate-up' : 'rate-down';
           const rateSign = ratio >= 0 ? '+' : '';
@@ -133,7 +141,7 @@
             <td>${price}</td>
             <td><span class="${rateClass}">${rateSign}${ratio}%</span></td>
             <td>${volume}</td>
-            <td><span class="tag">实时行情</span></td>
+            <td><span class="tag">LOF</span></td>
           `;
           tbody.appendChild(tr);
         });
@@ -145,9 +153,7 @@
       }
     }
 
-    // 初始化加载
     fetchLOFData();
-    // 自动刷新（每 30 秒更新一次）
     setInterval(fetchLOFData, 30000);
   </script>
 
