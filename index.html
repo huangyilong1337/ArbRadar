@@ -4,67 +4,114 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArbRadar | LOF套利雷达</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0d1117; color: #c9d1d9; padding: 12px; }
+    
+    /* 顶部标题栏 */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 4px;
+      border-bottom: 1px solid #30363d;
+      margin-bottom: 16px;
+    }
+    .header h1 { font-size: 1.2rem; color: #58a6ff; }
+    .time-badge { font-size: 0.75rem; color: #8b949e; background: #161b22; padding: 4px 8px; border-radius: 4px; border: 1px solid #30363d; }
+    
+    /* 容器与表格布局 */
+    .table-container {
+      width: 100%;
+      overflow-x: auto; /* 手机上支持左右滑动 */
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.85rem;
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #21262d;
+      white-space: nowrap;
+    }
+    th {
+      background-color: #21262d;
+      color: #8b949e;
+      font-weight: 600;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background-color: #1c2128; }
+
+    /* 数据样式 */
+    .fund-name { font-weight: bold; color: #f0f6fc; }
+    .fund-code { color: #8b949e; font-size: 0.75rem; }
+    .rate-up { color: #ff7b72; font-weight: bold; } /* 溢价红 */
+    .rate-down { color: #3fb950; font-weight: bold; } /* 折价绿 */
+    
+    /* 标签与公告 */
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      font-size: 0.7rem;
+      border-radius: 4px;
+      background: #21262d;
+      color: #c9d1d9;
+    }
+    .tag-limit { background: rgba(56, 139, 253, 0.15); color: #58a6ff; }
+    .notice-text { font-size: 0.75rem; color: #8b949e; max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
+  </style>
 </head>
 <body>
 
   <div class="header">
     <h1>📈 ArbRadar v0.1</h1>
-    <div class="time">更新于: <span id="time">10:00:00</span></div>
+    <!-- 自动提醒北京时间 -->
+    <div class="time-badge">更新: <span id="time">10:17:33</span> (北京时间)</div>
   </div>
 
-  <div class="card-list">
-    <!-- 样例基金卡片 1 -->
-    <div class="card">
-      <div class="card-header">
-        <span>易方达原油LOF <span class="fund-code">(161129)</span></span>
-        <span class="tag limit">限购 100元</span>
-      </div>
-      <div class="metrics">
-        <div class="metric-box">
-          <span class="label">实时溢价率</span>
-          <span class="premium-rate positive">+5.24%</span>
-        </div>
-        <div class="metric-box" style="text-align: right;">
-          <span class="label">成交额</span>
-          <span style="font-size: 0.95rem; font-weight: bold;">1,240 万</span>
-        </div>
-      </div>
-      <div class="tags">
-        <span class="tag settle">交收: T+3</span>
-        <span class="tag">申购状态: 暂停大额</span>
-      </div>
-      <div class="notice">
-        📢 最新公告: 关于暂停大额申购的业务公告 (2026-07-24)
-      </div>
-    </div>
-
-    <!-- 样例基金卡片 2 -->
-    <div class="card">
-      <div class="card-header">
-        <span>纳斯达克LOF <span class="fund-code">(161130)</span></span>
-        <span class="tag limit">限购 1000元</span>
-      </div>
-      <div class="metrics">
-        <div class="metric-box">
-          <span class="label">实时溢价率</span>
-          <span class="premium-rate positive">+2.18%</span>
-        </div>
-        <div class="metric-box" style="text-align: right;">
-          <span class="label">成交额</span>
-          <span style="font-size: 0.95rem; font-weight: bold;">850 万</span>
-        </div>
-      </div>
-      <div class="tags">
-        <span class="tag settle">交收: T+2</span>
-        <span class="tag">申购状态: 正常</span>
-      </div>
-      <div class="notice">
-        📢 最新公告: 溢价交易风险提示公告
-      </div>
-    </div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>代码 / 名称</th>
+          <th>溢价率</th>
+          <th>成交额</th>
+          <th>限购金额</th>
+          <th>交收</th>
+          <th>最新公告</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="fund-name">原油LOF</div>
+            <div class="fund-code">161129</div>
+          </td>
+          <td><span class="rate-up">+1.82%</span></td>
+          <td>5.8 亿</td>
+          <td><span class="tag tag-limit">100元</span></td>
+          <td><span class="tag">T+3</span></td>
+          <td><div class="notice-text">暂停大额申购的公告</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="fund-name">黄金LOF</div>
+            <div class="fund-code">160416</div>
+          </td>
+          <td><span class="rate-up">+0.95%</span></td>
+          <td>2.4 亿</td>
+          <td><span class="tag">暂停申购</span></td>
+          <td><span class="tag">T+2</span></td>
+          <td><div class="notice-text">溢价交易风险提示</div></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
 </body>
 </html>
-
