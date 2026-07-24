@@ -1,4 +1,4 @@
-const funds = [
+window.funds = [
   {
     code: "161129",
     name: "原油LOF",
